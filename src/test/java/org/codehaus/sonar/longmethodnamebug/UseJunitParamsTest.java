@@ -1,44 +1,42 @@
 package org.codehaus.sonar.longmethodnamebug;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static junitparams.JUnitParamsRunner.$;
 
 /**
- * Use standard Junit Parameterized library (Parameterized.class) for running the tests.
+ * Use junitparams library (JUnitParamsRunner.class) for parameterized tests.
  */
-@RunWith(Parameterized.class)
-public class PojoTestJunit {
-    private static final Logger LOG = LoggerFactory.getLogger(PojoTestJunit.class);
-
-    private int id;
-    private String description;
-
+@Ignore("Will sonar analysis succeed if this is test is not run?")
+@RunWith(JUnitParamsRunner.class)
+public class UseJunitParamsTest {
+    private static final Logger LOG = LoggerFactory.getLogger(UseJunitParamsTest.class);
+    
     private Pojo pojo;
-
-    public PojoTestJunit(int id, String description) {
-        this.id = id;
-        this.description = description;
-
+    
+    @Before
+    public void before() {
         pojo = new Pojo();
     }
-
+    
     @Test
-    public void testDescription() {
+    @Parameters
+    public void testDescription(int id, String description) {
         pojo.setId(id);
         pojo.setDescription(description);
-
+        
         LOG.info("description.length(): " + description.length());
         LOG.info("pojo.getDescription(): " + pojo.getDescription());
     }
 
-    @Parameterized.Parameters
-    public static Collection parametersForTestDescription() {
+    public Object[] parametersForTestDescription() {
         StringBuilder sb = new StringBuilder();
         sb.append("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dignissim fringilla fermentum. ");
         sb.append("Ut a nunc lacinia, porttitor enim in, facilisis sapien. ");
@@ -51,9 +49,9 @@ public class PojoTestJunit {
 
         String longDescription = sb.toString();
 
-        return Arrays.asList(new Object[][]{
-                {1, "short desc"},
-                {2, longDescription}
-        });
+        return $(
+                $(1, "short desc"),
+                $(2, longDescription)
+        );
     }
 }

@@ -1,10 +1,16 @@
 package org.codehaus.sonar.longmethodnamebug;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static junitparams.JUnitParamsRunner.$;
+
+@RunWith(JUnitParamsRunner.class)
 public class PojoTest {
     private static final Logger LOG = LoggerFactory.getLogger(PojoTest.class);
     
@@ -16,15 +22,16 @@ public class PojoTest {
     }
     
     @Test
-    public void shortDescription() {
-        String shortDescription = "short desc";
-        pojo.setDescription(shortDescription);
-
-        LOG.info("pojo: " + pojo.getDescription());
+    @Parameters
+    public void testDescription(int id, String description) {
+        pojo.setId(id);
+        pojo.setDescription(description);
+        
+        LOG.info("description.length(): " + description.length());
+        LOG.info("pojo.getDescription(): " + pojo.getDescription());
     }
 
-    @Test
-    public void longDescription() {
+    public Object[] parametersForTestDescription() {
         StringBuilder sb = new StringBuilder();
         sb.append("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dignissim fringilla fermentum. ");
         sb.append("Ut a nunc lacinia, porttitor enim in, facilisis sapien. ");
@@ -36,9 +43,10 @@ public class PojoTest {
         sb.append("Mauris porta justo quis felis euismod, ut ullamcorper tortor congue.");
 
         String longDescription = sb.toString();
-        pojo.setDescription(longDescription);
 
-        LOG.info("longDescription.length(): " + longDescription.length());
-        LOG.info("pojo: " + pojo.getDescription());
+        return $(
+                $(1, "short desc"),
+                $(2, longDescription)
+        );
     }
 }

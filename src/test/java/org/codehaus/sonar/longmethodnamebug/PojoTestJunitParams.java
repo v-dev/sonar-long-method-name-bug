@@ -10,9 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import static junitparams.JUnitParamsRunner.$;
 
+/**
+ * Use junitparams library (JUnitParamsRunner.class) for parameterized tests.
+ */
 @RunWith(JUnitParamsRunner.class)
-public class PojoTest {
-    private static final Logger LOG = LoggerFactory.getLogger(PojoTest.class);
+public class PojoTestJunitParams {
+    private static final Logger LOG = LoggerFactory.getLogger(PojoTestJunitParams.class);
     
     private Pojo pojo;
     
